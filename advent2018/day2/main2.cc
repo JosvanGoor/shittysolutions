@@ -35,7 +35,7 @@ int main()
     string buffer;
     vector<string> labels;
 
-    while(getline(cin, buffer))
+    while (getline(cin, buffer))
         labels.push_back(buffer);
 
     for (string const &lhs : labels)
