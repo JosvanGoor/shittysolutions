@@ -43,14 +43,12 @@ Node parse_node(vector<int> &data)
     return rval;
 }
 
-size_t depth = 0;
 size_t node_value(Node const &node)
 {
     if (node.children.empty())
     {
-        size_t meta = accumulate(node.metadata.begin(), node.metadata.end(), 0);
-        cout << string(depth * 4, ' ') << "metadata value: " << meta << "\n";
-        return meta;
+        return accumulate(node.metadata.begin(), node.metadata.end(), 0);
+        
     }
 
     size_t sum = 0;
@@ -58,17 +56,11 @@ size_t node_value(Node const &node)
     {
         int index = idx - 1;
         if (index >= node.children.size())
-        {
-            cout << string(depth * 4, ' ') << "idx " << index << " >= " << node.children.size() << "\n";
             continue;
-        }
 
-        ++depth;
         sum += node_value(node.children[index]);
-        --depth;
     }
 
-    cout << string(depth * 4, ' ') << "Children value: " << sum << "\n";
     return sum;
 }
 
@@ -83,11 +75,9 @@ int main()
         data.push_back(tmp);
     }
 
-    vector<int> copy(data.rbegin(), data.rend());
+    vector<int> copy(data.rbegin(), data.rend()); //reverse data
     Node root = parse_node(copy);
-    cout << root.metadata.size() << ", " << root.children.size() << "\n";
-
+    
     cout << "metadata sum: " << metadata_sum << "\n"; // answer to 1
-    size_t value = node_value(root);
-    cout << "node value: " << value << "\n";
+    cout << "node value: " << node_value(root) << "\n"; // answer to 2
 }
