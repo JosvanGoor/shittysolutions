@@ -5,6 +5,15 @@
 
 using namespace std;
 
+/*
+    $ time ./a.out < input.in 
+    Num players: 468
+    Last marble: 7184300
+    Highest reached score: 3156297594
+    ./a.out < input.in  0.16s user 0.05s system 99% cpu 0.203 total
+
+*/
+
 struct Game
 {
     size_t num_players;
@@ -42,20 +51,22 @@ struct List
         }
         else 
         {
-            for (; direction++; )
+            direction *= -1;
+            for (; direction--; )
                 rval = rval->previous;
         }
 
         return rval;
     }
 
-    void insert_after(List *entry) //assume single entry
+    List* insert_after(List *entry) //assume single entry
     {
-        List *curnext = next;
-
-        next = entry;
-        entry->next = curnext;
+        entry->next = next;
         entry->next->previous = entry; 
+        entry->previous = this;
+        next = entry;
+
+        return entry;
     }
 
     //returns next in list. or nullptr when list size == 1
@@ -78,7 +89,7 @@ struct List
     void print_list()
     {
         List *current = next;
-        cout << setw(5) << "(" + to_string(marble) + ")";
+        cout << setw(5) << marble;
 
         while (current != this)
         {
@@ -100,16 +111,36 @@ int main()
     List *root = new List(0);
     List *main = root;
 
-    size_t current_player;
+    vector<size_t> players;
+    players.resize(game.num_players, 0);
 
-    for (size_t idx = 0; idx < game.last_marble + 1; ++idx)
+    for (size_t idx = 1; idx < game.last_marble + 1; ++idx)
     {
-        main = main->rotate(1);
-        main->insert_after(new List(idx));
+        if (idx % 23 == 0)
+        {
+            size_t player = (idx + 1) % game.num_players;
+            players[player] += idx;
 
-        cout << "[" << setw(2) << idx << "]: ";
-        root->print_list();
-        cout << "\n";
+            main = main->rotate(-7); //?
+            players[player] += main->marble;
+            main = main->remove_current();
+        }
+        else
+        {
+            main = main->rotate(1)->insert_after(new List(idx));
+        }
     }
+
+    size_t player = 0;
+    for (size_t idx = 0; idx < game.num_players; ++idx)
+    {
+        if (players[player] < players[idx])
+            player = idx;
+    }
+
+    cout << "Highest reached score: " << players[player] << "\n";
+
+    while(root)
+        root = root->remove_current();
 
 }
