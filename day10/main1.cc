@@ -67,7 +67,7 @@ void write_to_console(vector<Star> const &stars)
     for (int idy = 0; idy < height; ++idy)
     {
         for (int idx = 0; idx < width; ++idx)
-            cout << (grid[idx][idy] ? '#' : '.');
+            cout << (grid[idx][idy] ? '#' : ' ');
         cout << "\n";
     }
 }
@@ -91,7 +91,7 @@ int main()
         if (next_size > size)
         {
             write_to_console(stars);
-            cout << "That took " << time << " seconds!\n";
+            cout << "That took " << time << " seconds!\n"; // part 2
             return 0;
         }
 
