@@ -33,3 +33,6 @@
 
 # valgrind dump files
 vgcore.**
+
+# precompiled headers / linter cache
+ipch/
