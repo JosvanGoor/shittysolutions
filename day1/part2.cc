@@ -28,8 +28,15 @@ int main()
     {
         for (size_t inner = outer + 1; inner < numbers.size(); ++inner)
         {
-            if (numbers[outer] + numbers[inner]== 2020)
-                cout << "Answer: " << numbers[outer] * numbers[inner] << "\n";
+            for (size_t innest = inner + 1; innest < numbers.size(); ++innest)
+            {
+                if (numbers[outer] + numbers[inner] + numbers[innest] == 2020)
+                    cout << "Answer: " << numbers[outer] * numbers[inner] * numbers[innest] << "\n";
+
+            }
         }
     }
+
+
+
 }
